@@ -1,0 +1,4 @@
+set_server http://192.168.1.17:8080,admin
+set_project JIRAMETRICS
+set_issue JIRAMETRICS-19
+show_issue

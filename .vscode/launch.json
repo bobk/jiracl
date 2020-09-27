@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: jiracl.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\jiracl.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: jiracl.py (WITH FILE ARG)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\jiracl.py",
+            "args": ["${workspaceFolder}\\jiracl-demo.txt"],
+            "console": "integratedTerminal"
+        }
+    ]
+}

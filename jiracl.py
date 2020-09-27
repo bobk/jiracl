@@ -131,7 +131,10 @@ class commands(cmd.Cmd):
         line_list = self.args_list(line)
         issue_key = line_list[0]
 
+        project_name = issue_key.split('-')[0]
         self.issue_key = issue_key
+        self.project_name = project_name
+
         print("Set to issue: " + str(self.issue_key))
 
         self.set_prompt()
@@ -155,7 +158,7 @@ class commands(cmd.Cmd):
         print("Issue: " + str(self.connection.issue(issue_key)))
         print("Summary: " + str(self.connection.issue(issue_key).fields.summary))
         print("Status: " + str(self.connection.issue(issue_key).fields.status))
-        print("Description: " + str(self.connection.issue(issue_key).fields.description[:100]))
+        print("Description: " + str(self.connection.issue(issue_key).fields.description)[:100])
         print("Assignee: " + str(self.connection.issue(issue_key).fields.assignee))
 
         return
@@ -210,4 +213,13 @@ class commands(cmd.Cmd):
 
     
 if __name__ == '__main__':
-    commands().cmdloop()
+
+    if (len(sys.argv) > 1):
+        try:
+            input = open(sys.argv[1], 'rt')
+            commands.use_rawinput = False
+            commands(stdin=input).cmdloop()
+        finally:
+            input.close()
+    else:
+        commands().cmdloop()
