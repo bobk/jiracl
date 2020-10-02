@@ -2,7 +2,7 @@
 http://github.com/bobk/jiracl
 
 jiracl.py
-this code demonstrates how to implement a simple Jira command line using the jira-python and cmd modules
+this code demonstrates how to implement a simple Jira command line using the jira module and cmd class
 see documentation on operation before using
 
 this is template code for others to copy and extend, so extensive error checking has not been added yet
@@ -19,7 +19,7 @@ from jira import JIRA
 
 class commands(cmd.Cmd):
     """
-    main class required by the cmd module, this class contains the variables and functions that constitute the command line
+    main class required by cmd, this class contains the variables and functions that constitute the command line
     """
 
     connection = None
@@ -98,10 +98,11 @@ class commands(cmd.Cmd):
 
     def do_create_issue(self, line):
         """
-        create_issue <summary, description, [assignee]>
+        create_issue <summary,description,[assignee]>
         Create a new issue in the current project, with the specified summary and description and optional assignee. 
         If assignee is not specified, the new issue will be assigned to the current user.
-        Example: create_issue 'My summary','My description',myusername
+        Example: create_issue 'My summary','My description'
+                 create_issue 'My summary','My description',myusername
         """
 
         line_list = self.args_list(line)
@@ -143,10 +144,10 @@ class commands(cmd.Cmd):
 
     def do_show_issue(self, line):
         """
-        show_issue <issuekey>
+        show_issue [issuekey]
         Shows several fields for the specified issuekey, or for the current issue
-        Example: show_issue MYPROJECT-123
-                 show_issue
+        Example: show_issue
+                 show_issue MYPROJECT-123
         """
 
         if (line != ''):
@@ -166,7 +167,7 @@ class commands(cmd.Cmd):
 
     def do_assign_issue(self, line):
         """
-        assign_issue <[assignee], [issuekey]>
+        assign_issue <[assignee],[issuekey]>
         Assigns the assignee to the specified issuekey, or to the current issuekey
         Example: assign_issue
                  assign_issue myusername
@@ -190,6 +191,29 @@ class commands(cmd.Cmd):
 
         issue = self.connection.issue(issue_key)
         self.connection.assign_issue(issue, assignee)
+
+        return
+
+
+    def do_comment_issue(self, line):
+        """
+        comment_issue <comment,[issuekey]>
+        Adds the specified comment to the specified issuekey, or to the current issuekey
+        Example: comment_issue 'This is a comment'
+                 comment_issue 'This is a comment',MYPROJECT-123
+        """
+
+        if (line != ''):
+            line_list = self.args_list(line)
+            if (len(line_list) == 2):
+                comment = line_list[0]
+                issue_key = line_list[1]
+            elif (len(line_list) == 1):
+                comment = line_list[0]
+                issue_key = self.issue_key
+
+        issue = self.connection.issue(issue_key)
+        self.connection.add_comment(issue, comment)
 
         return
 
